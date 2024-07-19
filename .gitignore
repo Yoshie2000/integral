@@ -45,6 +45,8 @@
 
 # CMake
 cmake-build-*/
+build/
+integral
 
 # Mac stuff
 **/.DS_Store

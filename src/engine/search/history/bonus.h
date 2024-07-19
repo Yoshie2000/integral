@@ -7,7 +7,7 @@
 namespace history {
 
 inline Tunable hist_default_gravity(
-    "hist_default_gravity", 15176, 8192, 32768, 1024);
+    "hist_default_gravity", 32768, 8192, 32768, 1024);
 inline Tunable hist_default_scale("hist_default_scale", 135, 65, 260, 5);
 inline Tunable hist_default_max_bonus(
     "hist_default_max_bonus", 1188, 580, 2318, 50);
