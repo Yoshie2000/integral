@@ -18,16 +18,19 @@ class ContinuationHistory {
     const Move move = stack->move;
 
     const int bonus = HistoryBonus(depth);
-    UpdateIndividualScore(move, bonus, stack - 1);
-    UpdateIndividualScore(move, bonus, stack - 2);
-    UpdateIndividualScore(move, bonus, stack - 4);
+    const int score = GetScore(move, stack - 1) + GetScore(move, stack - 2) + GetScore(move, stack - 4);
+    const int scaledBonus = ScaleBonus(score, bonus);
+
+    UpdateIndividualScore(move, scaledBonus, stack - 1);
+    UpdateIndividualScore(move, scaledBonus, stack - 2);
+    UpdateIndividualScore(move, scaledBonus, stack - 4);
 
     // Lower the score of the quiet moves that failed to raise alpha
     for (int i = 0; i < quiets.Size(); i++) {
       // Apply a linear dampening to the penalty as the depth increases
-      UpdateIndividualScore(quiets[i], -bonus, stack - 1);
-      UpdateIndividualScore(quiets[i], -bonus, stack - 2);
-      UpdateIndividualScore(quiets[i], -bonus, stack - 4);
+      UpdateIndividualScore(quiets[i], -scaledBonus, stack - 1);
+      UpdateIndividualScore(quiets[i], -scaledBonus, stack - 2);
+      UpdateIndividualScore(quiets[i], -scaledBonus, stack - 4);
     }
   }
 
@@ -50,7 +53,7 @@ class ContinuationHistory {
   }
 
  private:
-  void UpdateIndividualScore(Move move, int bonus, SearchStackEntry *stack) {
+  void UpdateIndividualScore(Move move, int scaledBonus, SearchStackEntry *stack) {
     if (!stack->continuation_entry) {
       return;
     }
@@ -62,7 +65,7 @@ class ContinuationHistory {
         *reinterpret_cast<ContinuationEntry *>(stack->continuation_entry);
 
     int &score = entry[state_.turn][piece][to];
-    score += ScaleBonus(score, bonus);
+    score += scaledBonus;
   }
 
  private:
