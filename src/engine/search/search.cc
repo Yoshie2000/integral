@@ -585,7 +585,9 @@ Score Search::PVSearch(int depth,
       reduction += !in_pv_node;
       reduction += cut_node;
       reduction -= is_quiet * history_.GetQuietMoveScore(move, stack) /
-                   static_cast<int>(lmr_hist_div);
+                   static_cast<int>(lmr_hist_div_quiet);
+      reduction -= !is_quiet * history_.GetCaptureMoveScore(move) /
+                    static_cast<int>(lmr_hist_div_noisy);
       reduction -= state.InCheck();
 
       // Ensure the reduction doesn't give us a depth below 0
