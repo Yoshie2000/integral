@@ -758,7 +758,7 @@ Score Search::PVSearch(Thread &thread,
       const int history_margin =
           is_quiet ? hist_thresh_base + hist_thresh_mult * depth
                    : capt_hist_thresh_base + capt_hist_thresh_mult * depth;
-      if (depth <= hist_prune_depth && stack->history_score <= history_margin) {
+      if (!in_pv_node && depth <= hist_prune_depth && stack->history_score <= history_margin) {
         move_picker.SkipQuiets();
         continue;
       }
